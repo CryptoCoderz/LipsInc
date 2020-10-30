@@ -1,0 +1,9 @@
+Building LipsInc
+
+See doc/readme-qt.rst for instructions on building LipsInc QT,
+the intended-for-end-users, nice-graphical-interface, reference
+implementation of LipsInc.
+
+See doc/build-*.txt for instructions on building LipsIncd,
+the intended-for-services, no-graphical-interface, reference
+implementation of LipsInc.
