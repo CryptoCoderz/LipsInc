@@ -8,7 +8,7 @@ What is the LipsInc [LIPS] Blockchain?
 *TODO: Update documentation regarding implemented tech as this section is out of date and much progress and upgrades have been made to mentioned sections...*
 
 ### Overview
-LipsInc is a blockchain project with the goal of offering secured messaging, websites on the chain and an overall pleasing experience to the user.
+NOTE: This is for platform integration staging, has no real use for 3rd party usage and is internal only.
 
 ### Blockchain Technology
 Blockchain technology has the capabilities to change a variety of things in the world and can also be the backbone of a new internet. One place that blockchain technology has not had an impact on yet is website on the blockchain. However, LipsInc is trying to change that and is well on their way to doing so.
