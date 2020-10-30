@@ -13,12 +13,6 @@ LipsInc is a blockchain project with the goal of offering secured messaging, web
 ### Blockchain Technology
 Blockchain technology has the capabilities to change a variety of things in the world and can also be the backbone of a new internet. One place that blockchain technology has not had an impact on yet is website on the blockchain. However, LipsInc is trying to change that and is well on their way to doing so.
 
-### Website on the Chain
-LipsInc Blockchain will keep sites extremely safe and will make them virtually impenetrable, which is creating a new standard for website safety and security. In addition to the security improvements, LipsInc Blockchain will also ensure that your website is never taken down or removed, no matter what. You will also have complete control of your data, and the sites will feature faster server times.
-
-### Secured Messaging
-Developing the usability features: The secured messaging system, masternodes (intuitive node launching and monitoring), smooth sync patch, shrinking blockchain, light clients and much much more.
-
 ### Custom Difficulty Retarget Algorithm “VRX”
 VRX is designed from the ground up to integrate properly with the Velocity parameter enforcement system to ensure users no longer receive orphan blocks.
 
