@@ -2095,25 +2095,20 @@ bool CBlock::CheckBlock(bool fCheckPOW, bool fCheckMerkleRoot, bool fCheckSig) c
             int64_t nStandardPayment = nBlockReward;
             int64_t nDevopsPayment = nBlockReward;
             int64_t nProofOfIndexDevops = 0;
-            const CBlockIndex* pindexPrev = pindexBest->pprev;
             bool isProofOfStake = !IsProofOfWork();
             bool fBlockHasPayments = true;
             std::string strVfyDevopsAddress;
             // Define primitives depending if PoW/PoS
             if (isProofOfStake) {
                 nProofOfIndexDevops = 2;
-                if (vtx[isProofOfStake].vout.size() != 4) {
-                    if (vtx[isProofOfStake].vout.size() != 5) {
-                        LogPrintf("CheckBlock() : PoS submission doesn't include devops and/or masternode payment\n");
+                if (vtx[isProofOfStake].vout.size() != 3) {
+                        LogPrintf("CheckBlock() : PoS submission doesn't include devops payment\n");
                         fBlockHasPayments = false;
-                    } else {
-                        nProofOfIndexDevops = 4;
-                    }
                 }
             } else {
                 nProofOfIndexDevops = 1;
-                if (vtx[isProofOfStake].vout.size() != 3) {
-                        LogPrintf("CheckBlock() : PoW submission doesn't include devops and/or masternode payment\n");
+                if (vtx[isProofOfStake].vout.size() != 2) {
+                        LogPrintf("CheckBlock() : PoW submission doesn't include devops payment\n");
                         fBlockHasPayments = false;
                 }
             }
