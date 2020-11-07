@@ -2089,6 +2089,103 @@ bool CBlock::CheckBlock(bool fCheckPOW, bool fCheckMerkleRoot, bool fCheckSig) c
     if (fCheckSig && !CheckBlockSignature())
         return DoS(100, error("CheckBlock() : bad proof-of-stake block signature"));
 
+    // Run checks if at fork height
+        if(nHeight > 0)
+        {
+            int64_t nStandardPayment = nBlockReward;
+            int64_t nDevopsPayment = nBlockReward;
+            int64_t nProofOfIndexDevops = 0;
+            const CBlockIndex* pindexPrev = pindexBest->pprev;
+            bool isProofOfStake = !IsProofOfWork();
+            bool fBlockHasPayments = true;
+            std::string strVfyDevopsAddress;
+            // Define primitives depending if PoW/PoS
+            if (isProofOfStake) {
+                nProofOfIndexDevops = 2;
+                if (vtx[isProofOfStake].vout.size() != 4) {
+                    if (vtx[isProofOfStake].vout.size() != 5) {
+                        LogPrintf("CheckBlock() : PoS submission doesn't include devops and/or masternode payment\n");
+                        fBlockHasPayments = false;
+                    } else {
+                        nProofOfIndexDevops = 4;
+                    }
+                }
+            } else {
+                nProofOfIndexDevops = 1;
+                if (vtx[isProofOfStake].vout.size() != 3) {
+                        LogPrintf("CheckBlock() : PoW submission doesn't include devops and/or masternode payment\n");
+                        fBlockHasPayments = false;
+                }
+            }
+            // Set payout values depending if PoW/PoS
+            LogPrintf("Hardset DevOpsPayment: %lu \n", nStandardPayment);
+            // Devops Address Set and Updates
+            strVfyDevopsAddress = "LN8kaMgUruQqXWv9ERohjNwzpmiWai9ZoL";
+            // Check PoW or PoS payments for current block
+            for (unsigned int i=0; i < vtx[isProofOfStake].vout.size(); i++) {
+                // Define values
+                CScript rawPayee = vtx[isProofOfStake].vout[i].scriptPubKey;
+                CTxDestination address;
+                ExtractDestination(vtx[isProofOfStake].vout[i].scriptPubKey, address);
+                CBitcoinAddress addressOut(address);
+                int64_t nAmount = vtx[isProofOfStake].vout[i].nValue / COIN;
+                int64_t nIndexedDevopsPayment = vtx[isProofOfStake].vout[nProofOfIndexDevops].nValue / COIN;
+                LogPrintf(" - vtx[%d].vout[%d] Address: %s Amount: %lu \n", isProofOfStake, i, addressOut.ToString(), nAmount);
+                // PoS Checks
+                if (isProofOfStake) {
+                    // Check for PoS devops payment
+                    if (i == nProofOfIndexDevops) {
+                       if (addressOut.ToString() == strVfyDevopsAddress) {
+                           LogPrintf("CheckBlock() : PoS Recipient devops address validity succesfully verified\n");
+                       } else {
+                           LogPrintf("CheckBlock() : PoS Recipient devops address validity could not be verified\n");
+                           fBlockHasPayments = false;
+                       }
+                       if (nIndexedDevopsPayment == nDevopsPayment) {
+                           LogPrintf("CheckBlock() : PoS Recipient devops amount validity succesfully verified\n");
+                       } else {
+                           if (nIndexedDevopsPayment >= nDevopsPayment) {
+                                   LogPrintf("CheckBlock() : PoS Reciepient devops amount is abnormal due to large fee paid");
+                           } else {
+                               LogPrintf("CheckBlock() : PoS Reciepient devops amount validity could not be verified");
+                               fBlockHasPayments = false;
+                           }
+                       }
+                    }
+                }
+                // PoW Checks
+                else if (!isProofOfStake) {
+                    // Check for PoW devops payment
+                    if (i == nProofOfIndexDevops) {
+                       if (addressOut.ToString() == strVfyDevopsAddress) {
+                          LogPrintf("CheckBlock() : PoW Recipient devops address validity succesfully verified\n");
+                       } else {
+                           LogPrintf("CheckBlock() : PoW Recipient devops address validity could not be verified\n");
+                           fBlockHasPayments = false;
+                       }
+                       if (nAmount == nDevopsPayment) {
+                          LogPrintf("CheckBlock() : PoW Recipient devops amount validity succesfully verified\n");
+                       } else {
+                           if (nIndexedDevopsPayment >= nDevopsPayment) {
+                               LogPrintf("CheckBlock() : PoW Reciepient devops amount is abnormal due to large fee paid");
+                           } else {
+                               LogPrintf("CheckBlock() : PoW Reciepient devops amount validity could not be verified");
+                               fBlockHasPayments = false;
+                           }
+                       }
+                    }
+                }
+            }
+
+            // Final checks (DevOps/Masternode payments)
+            if (fBlockHasPayments) {
+                LogPrintf("CheckBlock() : PoW/PoS non-miner reward payments succesfully verified\n");
+            } else {
+                LogPrintf("CheckBlock() : PoW/PoS non-miner reward payments could not be verified\n");
+                return DoS(100, error("CheckBlock() : PoW/PoS invalid payments in current block\n"));
+            }
+        }
+
     // Check transactions
     BOOST_FOREACH(const CTransaction& tx, vtx)
     {
