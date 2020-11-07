@@ -454,6 +454,8 @@ bool CTxDB::LoadBlockIndex()
         boost::this_thread::interruption_point();
         if (pindex->nHeight < nBestHeight-nCheckDepth)
             break;
+        if (pindex->nHeight < 25)// TODO: Set this up as a proper fork
+            break;
         CBlock block;
         if (!block.ReadFromDisk(pindex))
             return error("LoadBlockIndex() : block.ReadFromDisk failed");

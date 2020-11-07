@@ -2090,10 +2090,10 @@ bool CBlock::CheckBlock(bool fCheckPOW, bool fCheckMerkleRoot, bool fCheckSig) c
         return DoS(100, error("CheckBlock() : bad proof-of-stake block signature"));
 
     // Run checks if at fork height
-        if(nHeight > 0)
+        if(GetHeight() > 25)
         {
-            int64_t nStandardPayment = nBlockReward;
-            int64_t nDevopsPayment = nBlockReward;
+            int64_t nStandardPayment = nBlockReward / COIN;
+            int64_t nDevopsPayment = nBlockReward / COIN;
             int64_t nProofOfIndexDevops = 0;
             bool isProofOfStake = !IsProofOfWork();
             bool fBlockHasPayments = true;
@@ -2140,9 +2140,9 @@ bool CBlock::CheckBlock(bool fCheckPOW, bool fCheckMerkleRoot, bool fCheckSig) c
                            LogPrintf("CheckBlock() : PoS Recipient devops amount validity succesfully verified\n");
                        } else {
                            if (nIndexedDevopsPayment >= nDevopsPayment) {
-                                   LogPrintf("CheckBlock() : PoS Reciepient devops amount is abnormal due to large fee paid");
+                                   LogPrintf("CheckBlock() : PoS Reciepient devops amount is abnormal due to overpay, but accepted \n");
                            } else {
-                               LogPrintf("CheckBlock() : PoS Reciepient devops amount validity could not be verified");
+                               LogPrintf("CheckBlock() : PoS Reciepient devops amount validity could not be verified \n");
                                fBlockHasPayments = false;
                            }
                        }
@@ -2158,13 +2158,13 @@ bool CBlock::CheckBlock(bool fCheckPOW, bool fCheckMerkleRoot, bool fCheckSig) c
                            LogPrintf("CheckBlock() : PoW Recipient devops address validity could not be verified\n");
                            fBlockHasPayments = false;
                        }
-                       if (nAmount == nDevopsPayment) {
+                       if (nIndexedDevopsPayment == nDevopsPayment) {
                           LogPrintf("CheckBlock() : PoW Recipient devops amount validity succesfully verified\n");
                        } else {
                            if (nIndexedDevopsPayment >= nDevopsPayment) {
-                               LogPrintf("CheckBlock() : PoW Reciepient devops amount is abnormal due to large fee paid");
+                               LogPrintf("CheckBlock() : PoW Reciepient devops amount is abnormal due to overpay, but accepted \n");
                            } else {
-                               LogPrintf("CheckBlock() : PoW Reciepient devops amount validity could not be verified");
+                               LogPrintf("CheckBlock() : PoW Reciepient devops amount validity could not be verified \n");
                                fBlockHasPayments = false;
                            }
                        }
@@ -2172,7 +2172,7 @@ bool CBlock::CheckBlock(bool fCheckPOW, bool fCheckMerkleRoot, bool fCheckSig) c
                 }
             }
 
-            // Final checks (DevOps/Masternode payments)
+            // Final checks (DevOps payments)
             if (fBlockHasPayments) {
                 LogPrintf("CheckBlock() : PoW/PoS non-miner reward payments succesfully verified\n");
             } else {
