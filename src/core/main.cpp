@@ -2107,7 +2107,7 @@ bool CBlock::CheckBlock(bool fCheckPOW, bool fCheckMerkleRoot, bool fCheckSig) c
                         fBlockHasPayments = false;
                 }
             } else {
-                nProofOfIndexDevops = 1;
+                nProofOfIndexDevops = 0;
                 if (vtx[isProofOfStake].vout.size() != 2) {
                         LogPrintf("CheckBlock() : PoW submission doesn't include devops payment\n");
                         fBlockHasPayments = false;

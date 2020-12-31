@@ -1,6 +1,6 @@
 TEMPLATE = app
 TARGET = LipsInc-qt
-VERSION = 0.8.0.0
+VERSION = 0.8.0.1
 INCLUDEPATH += src src/json src/qt
 QT += core gui network
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
@@ -18,9 +18,9 @@ QMAKE_CXXFLAGS += -fpermissive
 # as a reference refer to the below section
 
 win32{
-BOOST_LIB_SUFFIX=-mgw81-mt-s-x32-1_72
-BOOST_INCLUDE_PATH=C:/deps/boost_1_72_0
-BOOST_LIB_PATH=C:/deps/boost_1_72_0/stage/lib
+BOOST_LIB_SUFFIX=-mgw8-mt-s-x32-1_74
+BOOST_INCLUDE_PATH=C:/deps/boost_1_74_0
+BOOST_LIB_PATH=C:/deps/boost_1_74_0/stage/lib
 BDB_INCLUDE_PATH=C:/deps/db-6.2.32.NC/build_unix
 BDB_LIB_PATH=C:/deps/db-6.2.32.NC/build_unix
 OPENSSL_INCLUDE_PATH=C:/deps/openssl-1.0.2u/include

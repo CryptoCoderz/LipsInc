@@ -412,9 +412,9 @@ CBlock* CreateNewBlock(CReserveKey& reservekey, bool fProofOfStake, int64_t* pFe
 
                     if (hasPayment) {
                         pblock->vtx[0].vout.resize(2);
-                        pblock->vtx[0].vout[1].scriptPubKey = do_payee;
-                        pblock->vtx[0].vout[1].nValue = devopsPayment;
-                        pblock->vtx[0].vout[0].nValue = (blockReward - devopsPayment);
+                        pblock->vtx[0].vout[0].scriptPubKey = do_payee;
+                        pblock->vtx[0].vout[0].nValue = devopsPayment;
+                        pblock->vtx[0].vout[1].nValue = (blockReward - devopsPayment);
                     }
 
                     CTxDestination address1;
