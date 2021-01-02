@@ -2113,7 +2113,7 @@ bool CWallet::CreateCoinStake(const CKeyStore& keystore, unsigned int nBits, int
     }
 
     // Set payment values
-    int64_t blockValue = nReward;
+    int64_t blockValue = nCredit;
     int64_t devopsPayment = blockValue;
 
     // Pay coin stake
